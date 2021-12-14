@@ -16,12 +16,6 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/DemoApp/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  pool:
-  name: Default
-  demands:
-   - agent.name -equals DevopsHostServe
-
 stages:
 - stage: Build
   displayName: Build and push stage
@@ -29,8 +23,8 @@ stages:
   - job: Build
     displayName: Build
     pool:
-    name: Default
-    demands:
+      name: Default
+      demands:
       - agent.name -equals DevopsHostServe
 
     steps:
