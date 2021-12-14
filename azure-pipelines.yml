@@ -14,7 +14,7 @@ variables:
   imageRepository: 'tauriankingdemoapp'
   containerRegistry: 'starkpltacr.azurecr.io'
   dockerfilePath: 'DemoApp/DemoApp/Dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: 'demoapp:$(Build.BuildId)'
 
 stages:
 - stage: Build
