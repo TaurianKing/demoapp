@@ -1,0 +1,54 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'b74e00cc-1fc0-495b-8b6e-ad8bade1a03f'
+  imageRepository: 'tauriankingdemoapp'
+  containerRegistry: 'starkpltacr.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/DemoApp/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  pool:
+  name: Default
+  demands:
+   - agent.name -equals DevopsHostServe
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+    name: Default
+    demands:
+      - agent.name -equals DevopsHostServe
+
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+    
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: DemoApp/Manifest
+        Contents: deployment.yml
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+
