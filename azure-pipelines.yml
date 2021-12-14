@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'b74e00cc-1fc0-495b-8b6e-ad8bade1a03f'
   imageRepository: 'tauriankingdemoapp'
   containerRegistry: 'starkpltacr.azurecr.io'
-  dockerfilePath: '/DemoApp/Dockerfile'
+  dockerfilePath: 'DemoApp/DemoApp/Dockerfile'
   tag: '$(Build.BuildId)'
 
 stages:
