@@ -10,8 +10,7 @@ pool:
   demands:
    - agent.name -equals DevopsHostServe
 
-resources:
-- repo: self
+
 
 variables:
   # Container registry service connection established during pipeline creation
@@ -21,8 +20,7 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/DemoApp/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  vmImageName: 'windows-latest'
+
 
 stages:
 - stage: Build
@@ -31,7 +29,9 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      name: Default
+      demands:
+        - agent.name -equals DevopsHostServe
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
